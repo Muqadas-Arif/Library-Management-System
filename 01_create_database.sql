@@ -28,16 +28,3 @@ GO
 USE LibraryManagementDB;
 GO
 
--- 2. CREATE TABLES
--- ============================================
-
--- Librarians Table
-CREATE TABLE Librarians (
-    librarian_id INT PRIMARY KEY IDENTITY(1,1),
-    first_name NVARCHAR(50) NOT NULL,
-    last_name NVARCHAR(50) NOT NULL,
-    email NVARCHAR(100) UNIQUE NOT NULL,
-    phone NVARCHAR(15),
-    hire_date DATE NOT NULL,
-    status NVARCHAR(10) DEFAULT 'Active' CHECK (status IN ('Active', 'Inactive'))
-);
