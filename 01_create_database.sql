@@ -1,9 +1,4 @@
--- ============================================
--- LIBRARY MANAGEMENT SYSTEM - DATABASE SCHEMA
--- ============================================
 
--- Drop tables if they exist (for clean implementation)
-DROP TABLE IF EXISTS Borrowing;
 -- ============================================
 -- LIBRARY MANAGEMENT SYSTEM - MS SQL SERVER
 -- Complete Implementation with Database Creation
