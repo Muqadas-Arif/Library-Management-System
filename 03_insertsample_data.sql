@@ -27,3 +27,22 @@ INSERT INTO Books (title, author, isbn, publisher, publication_year, category, t
 ('Introduction to Algorithms', 'Thomas Cormen', '978-0-262-03384-8', 'MIT Press', 2009, 'Technology', 3, 3),
 ('Pride and Prejudice', 'Jane Austen', '978-0-14-143951-8', 'Penguin Classics', 1813, 'Fiction', 2, 2);
 GO
+
+
+-- 4. CORE FUNCTIONALITIES - ADD RECORDS
+-- ============================================
+
+-- Query 4.1: Add a new book to the library
+INSERT INTO Books (title, author, isbn, publisher, publication_year, category, total_copies, available_copies)
+VALUES ('The Hobbit', 'J.R.R. Tolkien', '978-0-547-92822-7', 'Mariner Books', 1937, 'Fiction', 2, 2);
+
+-- Query 4.2: Add a new member
+INSERT INTO Members (first_name, last_name, email, phone, address, registration_date, membership_status)
+VALUES ('Alice', 'Cooper', 'alice.cooper@email.com', '555-1006', '987 Cedar Ln, City', CAST(GETDATE() AS DATE), 'Active');
+
+-- Query 4.3: Add a new librarian
+INSERT INTO Librarians (first_name, last_name, email, phone, hire_date, status)
+VALUES ('Robert', 'Williams', 'robert.williams@library.com', '555-0104', CAST(GETDATE() AS DATE), 'Active');
+GO
+
+
