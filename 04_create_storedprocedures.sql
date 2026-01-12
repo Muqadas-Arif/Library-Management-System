@@ -62,3 +62,67 @@ EXEC sp_BorrowBook @book_id = 1, @member_id = 1, @librarian_id = 1;
 EXEC sp_BorrowBook @book_id = 4, @member_id = 2, @librarian_id = 2;
 EXEC sp_BorrowBook @book_id = 5, @member_id = 3, @librarian_id = 1;
 GO
+
+STORED PROCEDURE - RETURN BOOK
+-- ============================================
+
+CREATE PROCEDURE sp_ReturnBook
+    @borrow_id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DECLARE @book_id INT;
+    DECLARE @current_status NVARCHAR(10);
+    DECLARE @error_message NVARCHAR(500);
+    
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        
+        -- Get book_id and current status
+        SELECT @book_id = book_id, @current_status = status
+        FROM Borrowing 
+        WHERE borrow_id = @borrow_id;
+        
+        IF @book_id IS NULL
+        BEGIN
+            SET @error_message = 'Borrow ID ' + CAST(@borrow_id AS NVARCHAR(10)) + ' does not exist.';
+            THROW 50003, @error_message, 1;
+        END
+        
+        IF @current_status = 'Returned'
+        BEGIN
+            SET @error_message = 'This book has already been returned.';
+            THROW 50004, @error_message, 1;
+        END
+        
+        -- Update borrowing record
+        UPDATE Borrowing
+        SET return_date = CAST(GETDATE() AS DATE),
+            status = 'Returned'
+        WHERE borrow_id = @borrow_id;
+        
+        -- Update book availability
+        UPDATE Books
+        SET available_copies = available_copies + 1
+        WHERE book_id = @book_id;
+        
+        COMMIT TRANSACTION;
+        
+        PRINT 'Book returned successfully.';
+        
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+            
+        PRINT 'Error: ' + ERROR_MESSAGE();
+        THROW;
+    END CATCH
+END;
+GO
+
+-- Test: Return a book
+EXEC sp_ReturnBook @borrow_id = 1;
+GO
+
